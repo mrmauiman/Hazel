@@ -21,8 +21,24 @@ namespace Hazel {
 	{
 		while (m_running)
 		{
+
+			for (Layer* layer : m_layer_stack)
+			{
+				layer->onUpdate();
+			}
+
 			m_window->onUpdate();
 		}
+	}
+
+	void Application::pushLayer(Layer* layer)
+	{
+		m_layer_stack.pushLayer(layer);
+	}
+
+	void Application::pushOverlay(Layer* overlay)
+	{
+		m_layer_stack.pushOverlay(overlay);
 	}
 
 	void Application::onEvent(Event& e)
@@ -30,7 +46,11 @@ namespace Hazel {
 		EventDispatcher dispatcher(e);
 		dispatcher.dispatch<WindowCloseEvent>(BIND_EVENT_FN(onWindowClose));
 
-		HZ_CORE_TRACE("{0}", e);
+		for (auto it = m_layer_stack.end(); it != m_layer_stack.begin(); )
+		{
+			(*--it)->onEvent(e);
+			if (e.handled) break;
+		}
 	}
 
 	bool Application::onWindowClose(WindowCloseEvent& e)
