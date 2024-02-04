@@ -4,10 +4,10 @@
 
 namespace Hazel {
 
-	class HAZEL_API MouseMoveEvent : public Event
+	class HAZEL_API MouseMovedEvent : public Event
 	{
 	public:
-		MouseMoveEvent(float x, float y)
+		MouseMovedEvent(float x, float y)
 			: m_mouse_x(x), m_mouse_y(y) {}
 
 		inline float getX() const { return m_mouse_x; }
@@ -52,7 +52,7 @@ namespace Hazel {
 	{
 	public:
 
-		inline float getMouseButton() const { return m_button; }
+		inline int getMouseButton() const { return m_button; }
 
 		EVENT_CLASS_CATEGORY(EventCategoryMouse | EventCategoryInput)
 	protected:
